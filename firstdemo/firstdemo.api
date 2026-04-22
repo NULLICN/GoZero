@@ -1,15 +1,23 @@
 syntax = "v1"
 
+// 此api文件做修改需要执行一遍goctl api go -api firstdemo.api -dir . 以重新生成go代码
 type Request {
 	Name string `path:"name"`
 }
 
 type Response {
 	Message string `json:"message"`
+	Success string `json:"success"`
 }
 
 service firstdemo-api {
 	@handler FirstdemoHandler
 	get /from/:name (Request) returns (Response)
+
+	//自定义你的api路由 随后会自动生成
+	// /handler/userhandler.go文件 编写你的业务逻辑
+	// /logic/userlogic.go文件     编写你的业务逻辑函数
+	@handler UserHandler
+	get /user returns (Response)
 }
 

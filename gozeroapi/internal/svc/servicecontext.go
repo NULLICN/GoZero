@@ -4,17 +4,15 @@
 package svc
 
 import (
-	"firstdemo/internal/config"
+	"gozeroapi/internal/config"
 )
 
 type ServiceContext struct {
-	Config     config.Config
-	DataSource string
+	Config config.Config
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
 	return &ServiceContext{
-		Config:     c,
-		DataSource: c.Mysql.DataSource, // 为业务访问挂载上
+		Config: c,
 	}
 }

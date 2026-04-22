@@ -6,7 +6,7 @@ package handler
 import (
 	"net/http"
 
-	"firstdemo/internal/svc"
+	"gozeroapi/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
 )
@@ -16,13 +16,13 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		[]rest.Route{
 			{
 				Method:  http.MethodGet,
-				Path:    "/from/:name",
-				Handler: FirstdemoHandler(serverCtx),
+				Path:    "/api/focus",
+				Handler: GetFocusHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodGet,
-				Path:    "/user",
-				Handler: UserHandler(serverCtx),
+				Path:    "/api/focus/:id",
+				Handler: GetFocusByIdHandler(serverCtx),
 			},
 		},
 	)
