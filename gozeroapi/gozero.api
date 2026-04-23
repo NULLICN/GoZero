@@ -5,13 +5,19 @@ type CommonResponse {
 	Success bool        `json:"success"`
 	Code    int         `json:"code"`
 	Message string      `json:"message"`
-	Data    interface{} `json:"data,omitempty"`
+	Data    interface{} `json:"data,omitempty"` // omitempty表示此字段可选择不返回值
 }
 
 // 另一个方式定义接口请求和响应
 type (
-	FocusRequest {
-		Id string `path:id` // 访问路径传值
+	FocusRequestByPath {
+		Id string `path:"id"` // 动态路由传值 /:id 术语：路径参数（Path Parameter）或 URL 参数（URL Parameter）
+	}
+	FocusRequestByQuery {
+		Id string `form:"id,default='1145'"` // 查询传值 ?id=123 术语：查询参数（Query Parameter）或 查询字符串（Query String）
+	}
+	FocusRequestByBody {
+		Id string `form:"id"` // 表单传值
 	}
 	Focus {
 		Id    string `json:"id"`
@@ -25,12 +31,22 @@ type request {}
 
 type response {}
 
+@server (
+	group:  focus
+	prefix: /api
+)
 service gozero-api {
 	@handler GetFocus
-	get /api/focus returns (CommonResponse)
+	get /focus returns (CommonResponse)
 
 	// 通过id获取一个焦点图
-	@handler GetFocusById
-	get /api/focus/:id (FocusRequest) returns (CommonResponse)
+	@handler GetFocusWithIdByPath
+	get /focus/:id (FocusRequestByPath) returns (CommonResponse)
+
+	@handler GetFocusWithIdByQuery
+	get /focus/query (FocusRequestByQuery) returns (CommonResponse)
+
+	@handler GetFocusWithIdByBody
+	post /focus/body (FocusRequestByBody) returns (CommonResponse)
 }
 

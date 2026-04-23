@@ -1,7 +1,7 @@
 // Code scaffolded by goctl. Safe to edit.
 // goctl 1.10.1
 
-package logic
+package focus
 
 import (
 	"context"
@@ -30,8 +30,8 @@ func (l *GetFocusLogic) GetFocus() (resp *types.CommonResponse, err error) {
 	// todo: add your logic here and delete this line
 	resp = &types.CommonResponse{
 		Success: true,
-		Code:    0,
-		Message: "",
+		Code:    200,
+		Message: "two focuses",
 		Data: []types.Focus{
 			{
 				Id:    "1",

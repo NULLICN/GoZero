@@ -7,7 +7,7 @@ type CommonResponse struct {
 	Success bool        `json:"success"`
 	Code    int         `json:"code"`
 	Message string      `json:"message"`
-	Data    interface{} `json:"data,omitempty"`
+	Data    interface{} `json:"data,omitempty"` // omitempty表示此字段可选择不返回值
 }
 
 type Focus struct {
@@ -17,8 +17,16 @@ type Focus struct {
 	Link  string `json:"link"`
 }
 
-type FocusRequest struct {
-	Id string `path:id` // 访问路径传值
+type FocusRequestByBody struct {
+	Id string `form:"id"` // 表单传值
+}
+
+type FocusRequestByPath struct {
+	Id string `path:"id"` // 动态路由传值 /:id 术语：路径参数（Path Parameter）或 URL 参数（URL Parameter）
+}
+
+type FocusRequestByQuery struct {
+	Id string `form:"id,default='1145'"` // 查询传值 ?id=123 术语：查询参数（Query Parameter）或 查询字符串（Query String）
 }
 
 type Request struct {

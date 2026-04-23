@@ -6,6 +6,7 @@ package handler
 import (
 	"net/http"
 
+	focus "gozeroapi/internal/handler/focus"
 	"gozeroapi/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
@@ -16,14 +17,25 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		[]rest.Route{
 			{
 				Method:  http.MethodGet,
-				Path:    "/api/focus",
-				Handler: GetFocusHandler(serverCtx),
+				Path:    "/focus",
+				Handler: focus.GetFocusHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodGet,
-				Path:    "/api/focus/:id",
-				Handler: GetFocusByIdHandler(serverCtx),
+				Path:    "/focus/:id",
+				Handler: focus.GetFocusWithIdByPathHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/focus/body",
+				Handler: focus.GetFocusWithIdByBodyHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/focus/query",
+				Handler: focus.GetFocusWithIdByQueryHandler(serverCtx),
 			},
 		},
+		rest.WithPrefix("/api"),
 	)
 }
