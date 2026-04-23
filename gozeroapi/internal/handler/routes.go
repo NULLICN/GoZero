@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	focus "gozeroapi/internal/handler/focus"
+	users "gozeroapi/internal/handler/users"
 	"gozeroapi/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
@@ -16,26 +17,51 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
 		[]rest.Route{
 			{
+				// 获取焦点图列表
 				Method:  http.MethodGet,
-				Path:    "/focus",
+				Path:    "/",
 				Handler: focus.GetFocusHandler(serverCtx),
 			},
 			{
+				// 通过id获取一个焦点图
 				Method:  http.MethodGet,
-				Path:    "/focus/:id",
+				Path:    "/:id",
 				Handler: focus.GetFocusWithIdByPathHandler(serverCtx),
 			},
 			{
+				// 通过请求体获取焦点图
 				Method:  http.MethodPost,
-				Path:    "/focus/body",
+				Path:    "/body",
 				Handler: focus.GetFocusWithIdByBodyHandler(serverCtx),
 			},
 			{
+				// 通过查询参数获取焦点图
 				Method:  http.MethodGet,
-				Path:    "/focus/query",
+				Path:    "/query",
 				Handler: focus.GetFocusWithIdByQueryHandler(serverCtx),
 			},
 		},
-		rest.WithPrefix("/api"),
+		rest.WithPrefix("/api/focus"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodGet,
+				Path:    "/:id",
+				Handler: users.GetUsersByIdHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/add",
+				Handler: users.AddUserHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/index",
+				Handler: users.GetUsersHandler(serverCtx),
+			},
+		},
+		rest.WithPrefix("/api/user"),
 	)
 }

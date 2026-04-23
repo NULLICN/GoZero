@@ -7,7 +7,7 @@ type CommonResponse struct {
 	Success bool        `json:"success"`
 	Code    int         `json:"code"`
 	Message string      `json:"message"`
-	Data    interface{} `json:"data,omitempty"` // omitempty表示此字段可选择不返回值
+	Data    interface{} `json:"data,omitempty"`
 }
 
 type Focus struct {
@@ -29,8 +29,16 @@ type FocusRequestByQuery struct {
 	Id string `form:"id,default='1145'"` // 查询传值 ?id=123 术语：查询参数（Query Parameter）或 查询字符串（Query String）
 }
 
-type Request struct {
+type User struct {
+	Id      string `json:"id"`
+	Name    string `json:"name"`
+	AddTime string `json:"add_time"`
 }
 
-type Response struct {
+type UserAdd struct {
+	User
+}
+
+type UserQuestById struct {
+	Id string `path:"id"`
 }

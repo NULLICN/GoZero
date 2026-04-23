@@ -23,21 +23,21 @@ type (
 
 @server (
     group:  focus
-    prefix: /api
+    prefix: /api/focus
 )
 service gozero-api {
     @doc "获取焦点图列表"
     @handler GetFocus
-    get /focus returns (CommonResponse)
+    get / returns (CommonResponse)
 
     // 通过id获取一个焦点图
     @doc "通过id获取一个焦点图"
     @handler GetFocusWithIdByPath
-    get /focus/:id (FocusRequestByPath) returns (CommonResponse)
+    get /:id (FocusRequestByPath) returns (CommonResponse)
 
     @doc "通过查询参数获取焦点图"
     @handler GetFocusWithIdByQuery
-    get /focus/query (FocusRequestByQuery) returns (CommonResponse)
+    get /query (FocusRequestByQuery) returns (CommonResponse)
 
 //    @doc "通过请求体获取焦点图"
     @doc (
@@ -45,5 +45,5 @@ service gozero-api {
         description: "通过请求体获取焦点图，适用于需要传递复杂数据的场景"
     )
     @handler GetFocusWithIdByBody
-    post /focus/body (FocusRequestByBody) returns (CommonResponse)
+    post /body (FocusRequestByBody) returns (CommonResponse)
 }

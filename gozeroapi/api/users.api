@@ -1,0 +1,36 @@
+syntax = "v1"
+
+import "common.api"
+
+
+type (
+    User {
+        Id       string `json:"id"`
+        Name     string `json:"name"`
+        AddTime    string `json:"add_time"`
+    }
+
+    UserQuestById {
+        Id string `path:"id"`
+    }
+
+    UserAdd {
+        User
+    }
+)
+
+@server (
+    group:  users
+    prefix: /api/user
+)
+
+service gozero-api {
+    @handler GetUsers
+    get /index () returns (CommonResponse)
+
+    @handler GetUsersById
+    get /:id (UserQuestById) returns (CommonResponse)
+
+    @handler AddUser
+    post /add (UserAdd) returns (CommonResponse)
+}
