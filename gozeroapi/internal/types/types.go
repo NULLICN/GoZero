@@ -30,13 +30,13 @@ type FocusRequestByQuery struct {
 }
 
 type User struct {
-	Id      string `json:"id"`
-	Name    string `json:"name"`
-	AddTime string `json:"add_time"`
+	Id       int    `json:"id"`
+	Username string `json:"username"`
+	AddTime  string `json:"add_time"`
 }
 
 type UserAdd struct {
-	User
+	Username string `json:"username"`
 }
 
 type UserQuestById struct {

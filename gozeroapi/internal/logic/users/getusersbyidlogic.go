@@ -5,10 +5,9 @@ package users
 
 import (
 	"context"
-	"gozeroapi/model"
-
 	"gozeroapi/internal/svc"
 	"gozeroapi/internal/types"
+	"strconv"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -30,28 +29,39 @@ func NewGetUsersByIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetU
 func (l *GetUsersByIdLogic) GetUsersById(req *types.UserQuestById) (resp *types.CommonResponse, err error) {
 	l.Infof("开始查询用户，ID: %s", req.Id)
 
-	var user types.User
-	result := model.DB.Where("id = ?", req.Id).First(&user)
-
-	// 检查是否查询到用户
-	if result.Error != nil {
-		l.Infof("用户不存在，ID: %s", req.Id)
+	// 将字符串ID转换为int64
+	aUserId, parseErr := strconv.ParseInt(req.Id, 10, 64)
+	if parseErr != nil {
+		l.Errorf("ID格式错误: %s", req.Id)
 		resp = &types.CommonResponse{
 			Success: false,
-			Code:    404,
-			Message: "用户不存在",
+			Code:    400,
+			Message: "ID格式错误",
 		}
 		return
 	}
 
-	// 返回成功响应
-	l.Infof("查询用户成功，ID: %s", req.Id)
+	// 从数据库查询 mysql.Users 类型的数据
+	dbUser, queryErr := l.svcCtx.UserModel.FindOne(l.ctx, aUserId)
+	if queryErr != nil {
+		l.Errorf("查询用户失败，ID: %s, 错误: %v", req.Id, queryErr)
+		resp = &types.CommonResponse{
+			Success: false,
+			Code:    500,
+			Message: "查询用户失败",
+		}
+		return
+	}
+
+	// 使用转换函数将 mysql.Users 转换为 types.User
+	// 这是从数据库类型到API类型的适配器
+	apiUser := types.UserFromDBModel(dbUser)
+
 	resp = &types.CommonResponse{
 		Success: true,
 		Code:    200,
 		Message: "查询用户成功",
-		Data:    user,
+		Data:    apiUser,
 	}
-
 	return
 }

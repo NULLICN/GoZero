@@ -5,9 +5,9 @@ import "common.api"
 
 type (
     User {
-        Id       string `json:"id"`
-        Name     string `json:"name"`
-        AddTime    string `json:"add_time"`
+        Id       int    `json:"id"`
+        Username     string `json:"username"`
+        AddTime  string `json:"add_time"`
     }
 
     UserQuestById {
@@ -15,7 +15,7 @@ type (
     }
 
     UserAdd {
-        User
+        Username     string `json:"username"`
     }
 )
 

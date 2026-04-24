@@ -5,7 +5,6 @@ package users
 
 import (
 	"context"
-	"gozeroapi/model"
 	"time"
 
 	"gozeroapi/internal/svc"
@@ -29,36 +28,47 @@ func NewAddUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddUserLo
 }
 
 func (l *AddUserLogic) AddUser(req *types.UserAdd) (resp *types.CommonResponse, err error) {
-	l.Infof("开始创建用户，Name: %s", req.User.Name)
+	l.Infof("开始创建用户，Name: %s", req.Username)
 
-	// 构建用户对象
-	user := types.User{
-		Id:      req.User.Id,
-		Name:    req.User.Name,
-		AddTime: time.Now().Format("2006-01-02 15:04:05"),
+	// 获取当前时间（字符串格式）
+	currentTime := time.Now().Format("2006-01-02 15:04:05")
+
+	// 1. 构建 API 类型的 User 对象（单数）
+	apiUser := &types.User{
+		Id:       0,
+		Username: req.Username,
+		AddTime:  currentTime,
 	}
 
-	// 执行数据库插入
-	result := model.DB.Create(&user)
+	// 2. 使用转换函数将 API User 转换为数据库 Users 类型（复数）
+	// 这里演示了 types.User <-> mysql.Users 的适配器模式
+	dbUser := apiUser.ToDBModel()
 
-	if result.Error != nil {
-		l.Errorf("创建用户失败: %v", result.Error)
+	// 3. 调用数据库model层的Insert方法进行数据持久化
+	result, err := l.svcCtx.UserModel.Insert(l.ctx, dbUser)
+	if err != nil {
+		l.Errorf("创建用户失败: %v", err)
 		resp = &types.CommonResponse{
 			Success: false,
 			Code:    500,
 			Message: "创建用户失败",
-			Data:    result.Error.Error(),
 		}
 		return
 	}
 
-	// 返回成功响应
-	l.Infof("创建用户成功，用户ID: %s", user.Id)
+	// 4. 获取新插入的用户ID（可选，取决于是否需要返回）
+	lastInsertId, err := result.LastInsertId()
+	if err == nil {
+		apiUser.Id = int(lastInsertId)
+	}
+
+	// 5. 返回成功响应
+	l.Infof("创建用户成功，用户ID: %d", apiUser.Id)
 	resp = &types.CommonResponse{
 		Success: true,
 		Code:    200,
 		Message: "创建用户成功",
-		Data:    user,
+		Data:    apiUser,
 	}
 
 	return

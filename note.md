@@ -5,3 +5,5 @@
 <p>goctl api go --api firstdemo.api --dir .</p>
 <h3>3.goctl api --o 生成api文件</h3>
 <p>goctl api --o gozero.api</p>
+<h3>4.goctl model mysql ddl 生成SQL模型代码</h3>
+<p>goctl model mysql ddl --src ./users.sql --dir .</p>
