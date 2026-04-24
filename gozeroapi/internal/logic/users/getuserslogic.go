@@ -44,6 +44,7 @@ func (l *GetUsersLogic) GetUsers() (resp *types.CommonResponse, err error) {
 	// 转换为 API 响应类型 (types.User)
 	apiUsers := make([]*types.User, 0, len(dbUsers))
 	for _, dbUser := range dbUsers {
+		// 把dbUsers里的每一个User都进行处理，并append到切片变量中
 		apiUser := types.UserFromDBModel(dbUser)
 		apiUsers = append(apiUsers, apiUser)
 	}
@@ -54,7 +55,7 @@ func (l *GetUsersLogic) GetUsers() (resp *types.CommonResponse, err error) {
 		Success: true,
 		Code:    200,
 		Message: "查询用户列表成功",
-		Data:    apiUsers,
+		Data:    apiUsers, // 最后返回处理好的User切片
 	}
 
 	return

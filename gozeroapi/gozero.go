@@ -6,6 +6,8 @@ package main
 import (
 	"flag"
 	"fmt"
+	"os"
+	"time"
 
 	"gozeroapi/internal/config"
 	"gozeroapi/internal/handler"
@@ -19,6 +21,10 @@ var configFile = flag.String("f", "etc/gozero-api.yaml", "the config file")
 
 func main() {
 	flag.Parse()
+
+	// 设置时区为中国标准时间（UTC+8）
+	_ = os.Setenv("TZ", "Asia/Shanghai")
+	time.Local = time.FixedZone("CST", 8*3600)
 
 	var c config.Config
 	conf.MustLoad(*configFile, &c)

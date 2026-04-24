@@ -6,7 +6,7 @@ import "common.api"
 type (
     User {
         Id       int    `json:"id"`
-        Username     string `json:"username"`
+        Username string `json:"username"`
         AddTime  string `json:"add_time"`
     }
 

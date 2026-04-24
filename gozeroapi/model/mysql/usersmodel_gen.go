@@ -9,6 +9,7 @@ import (
 	"database/sql"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/zeromicro/go-zero/core/stores/builder"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
@@ -38,7 +39,7 @@ type (
 	Users struct {
 		Username sql.NullString `db:"username"`
 		Id       int64          `db:"id"`
-		AddTime  sql.NullTime   `db:"add_time"`
+		AddTime  time.Time      `db:"add_time"`
 	}
 )
 

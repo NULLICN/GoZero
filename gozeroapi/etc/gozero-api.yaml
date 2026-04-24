@@ -2,7 +2,7 @@ Name: gozero-api
 Host: 0.0.0.0
 Port: 8888
 Mysql:
-  DataSource: "root:040412@tcp(47.109.80.234:3306)/gorm?charset=utf8mb4&parseTime=True&loc=Local"
+  DataSource: "root:040412@tcp(47.109.80.234:3306)/gorm?charset=utf8mb4&parseTime=True&loc=Asia%2FShanghai"
 
 # 添加日志配置
 #Log:

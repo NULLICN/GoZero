@@ -11,7 +11,7 @@
  Target Server Version : 80027 (8.0.27)
  File Encoding         : 65001
 
- Date: 24/04/2026 09:14:55
+ Date: 24/04/2026 21:12:54
 */
 
 SET NAMES utf8mb4;
@@ -24,8 +24,8 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users`  (
   `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `id` int NOT NULL AUTO_INCREMENT,
-  `add_time` timestamp NULL DEFAULT NULL,
+  `add_time` datetime NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;
