@@ -1,0 +1,11 @@
+syntax = "v1"
+
+// 通用的响应结构
+type CommonResponse {
+    Success bool        `json:"success"`
+    Code    int         `json:"code"`
+    Message string      `json:"message"`
+    Data    interface{} `json:"data,omitempty"`
+    // omitempty 表示可为空 意味着此字段可能不会返回任何值
+    // optional 表示可选 意味着可以不传入任何值给该字段
+}

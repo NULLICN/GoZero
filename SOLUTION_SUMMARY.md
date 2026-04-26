@@ -258,7 +258,7 @@ func TestUserToDBModel(t *testing.T) {
 ### 示例：添加新的 UserUpdate API
 
 ```go
-// 1. 在 users.api 中定义
+// 1. 在 book.api 中定义
 type UserUpdate {
     Id      int    `path:"id"`
     Name    string `json:"name"`

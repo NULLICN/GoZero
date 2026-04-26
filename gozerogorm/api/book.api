@@ -1,0 +1,51 @@
+syntax = "v1"
+
+import "common.api"
+
+
+type (
+    Book {
+        Id       int    `json:"id"`
+        Bookname string `json:"bookname"`
+        Price    float64  `json:"price"`
+    }
+
+    BookQuestById {
+        Id int `path:"id"`
+    }
+
+    BookAdd {
+        Bookname    string  `json:"bookname"`
+        Price       float64 `json:"price"`
+    }
+
+    BookWhere {
+        Bookname    string  `json:"bookname"`
+    }
+
+    BookSQL {
+        Id int `json:"id"`
+    }
+)
+
+@server (
+    group:  books
+    prefix: /api/book
+)
+
+service gozerogorm-api {
+    @handler Getbooks
+    get /index () returns (CommonResponse)
+
+    @handler GetUserById
+    get /:id (BookQuestById) returns (CommonResponse)
+
+    @handler AddBook
+    post /add (BookAdd) returns (CommonResponse)
+
+    @handler WhereBook
+    post /where (BookWhere) returns (CommonResponse)
+
+    @handler SQLBook
+    post /sql (BookSQL) returns (CommonResponse)
+}
