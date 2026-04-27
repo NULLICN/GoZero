@@ -1,0 +1,13 @@
+syntax = "v1"
+
+import "common.api"
+
+@server (
+    group:  bookmetadata
+    prefix: /api/bookmetadata
+)
+
+service gozerogorm-api {
+    @handler GetBookAndMetadata
+    get / returns (CommonResponse)
+}

@@ -6,6 +6,7 @@ package handler
 import (
 	"net/http"
 
+	bookmetadata "gozerogorm/internal/handler/bookmetadata"
 	books "gozerogorm/internal/handler/books"
 	"gozerogorm/internal/svc"
 
@@ -17,6 +18,17 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		[]rest.Route{
 			{
 				Method:  http.MethodGet,
+				Path:    "/",
+				Handler: bookmetadata.GetBookAndMetadataHandler(serverCtx),
+			},
+		},
+		rest.WithPrefix("/api/bookmetadata"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodGet,
 				Path:    "/:id",
 				Handler: books.GetUserByIdHandler(serverCtx),
 			},
@@ -24,6 +36,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Method:  http.MethodPost,
 				Path:    "/add",
 				Handler: books.AddBookHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/getbookmetadata",
+				Handler: books.GetBookAndMetadataHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodGet,

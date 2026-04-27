@@ -48,4 +48,7 @@ service gozerogorm-api {
 
     @handler SQLBook
     post /sql (BookSQL) returns (CommonResponse)
+
+    @handler GetBookAndMetadata
+    get /getbookmetadata returns (CommonResponse)
 }
