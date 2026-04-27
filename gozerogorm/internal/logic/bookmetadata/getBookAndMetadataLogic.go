@@ -29,14 +29,16 @@ func NewGetBookAndMetadataLogic(ctx context.Context, svcCtx *svc.ServiceContext)
 
 func (l *GetBookAndMetadataLogic) GetBookAndMetadata() (resp *types.CommonResponse, err error) {
 	// todo: add your logic here and delete this line
-	var bookmetadata []gorm.Bookmetadata
+	// var bookmetadata []gorm.Bookmetadata
 	//err = l.svcCtx.DB.Preload("Book").Find(&bookmetadata).Error
-	err = l.svcCtx.DB.Preload("Book").Find(&bookmetadata).Error
+	//err = l.svcCtx.DB.Preload("Book").Find(&bookmetadata).Error
+	var book []gorm.Bookmetadata
+	err = l.svcCtx.DB.Preload("Book").Find(&book).Error
 	if err != nil {
 		return &types.CommonResponse{
 			Code:    0,
 			Success: false,
-			Message: "查询失败",
+			Message: "联表查询失败",
 		}, nil
 	}
 
@@ -44,7 +46,8 @@ func (l *GetBookAndMetadataLogic) GetBookAndMetadata() (resp *types.CommonRespon
 		Code:    200,
 		Success: true,
 		Message: "success",
-		Data:    bookmetadata,
+		//Data:    bookmetadata,
+		Data: book,
 	}
 	return
 }

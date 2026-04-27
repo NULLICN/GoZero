@@ -1,9 +1,9 @@
 package gorm
 
 type Bookmetadata struct {
-	Id        int    `gorm:"primaryKey" json:"id"`
-	Extrainfo string `json:"extrainfo"`
-	Book      []Book `json:"book"`
+	BooksBookmetadataId int    `json:"books_bookmetadata_id"`
+	Extrainfo       string `json:"extrainfo"`
+	//Book      []Book `json:"book"`
 }
 
 func (Bookmetadata) TableName() string {

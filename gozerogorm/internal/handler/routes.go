@@ -39,7 +39,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 			{
 				Method:  http.MethodGet,
-				Path:    "/getbookmetadata",
+				Path:    "/bookmetadata",
 				Handler: books.GetBookAndMetadataHandler(serverCtx),
 			},
 			{

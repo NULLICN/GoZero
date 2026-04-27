@@ -30,7 +30,7 @@ func NewGetBookAndMetadataLogic(ctx context.Context, svcCtx *svc.ServiceContext)
 func (l *GetBookAndMetadataLogic) GetBookAndMetadata() (resp *types.CommonResponse, err error) {
 	// todo: add your logic here and delete this line
 	var book []gorm.Book
-	err = l.svcCtx.DB.Preload("Metadata").Find(&book).Error
+	err = l.svcCtx.DB.Preload("Bookmetadata").Find(&book).Error
 	if err != nil {
 		return &types.CommonResponse{
 			Code:    0,
