@@ -1,0 +1,28 @@
+syntax = "v1"
+
+import "common.api"
+
+type (
+	// 课程ID请求
+	LessonIdReq {
+		LessonId int `path:"lessonId"`
+	}
+)
+
+@server (
+	group: lesson
+	prefix: /api/lesson
+)
+service gozerogorm-api {
+	// 课程详情
+	@handler GetOneLesson
+	get /oneLesson/:lessonId (LessonIdReq) returns (CommonResponse)
+
+	// 课程列表
+	@handler GetLessonList
+	get /list returns (CommonResponse)
+
+	// 获取课程下的所有学生
+	@handler GetLessonStudents
+	get /lessonStudents (LessonIdReq) returns (CommonResponse)
+}

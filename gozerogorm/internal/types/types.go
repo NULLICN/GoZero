@@ -32,3 +32,11 @@ type CommonResponse struct {
 	Message string      `json:"message"`
 	Data    interface{} `json:"data,omitempty"`
 }
+
+type LessonIdReq struct {
+	LessonId int `path:"lessonId"`
+}
+
+type StudentIdReq struct {
+	StudentId int `path:"studentId"`
+}

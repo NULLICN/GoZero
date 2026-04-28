@@ -3,3 +3,5 @@ syntax = "v1"
 // 导入抽离的api
 import "./api/book.api"
 import "./api/bookmetadata.api"
+import "./api/lesson.api"
+import "./api/student.api"

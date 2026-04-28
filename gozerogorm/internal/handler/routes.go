@@ -8,6 +8,8 @@ import (
 
 	bookmetadata "gozerogorm/internal/handler/bookmetadata"
 	books "gozerogorm/internal/handler/books"
+	lesson "gozerogorm/internal/handler/lesson"
+	student "gozerogorm/internal/handler/student"
 	"gozerogorm/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
@@ -59,5 +61,47 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 		},
 		rest.WithPrefix("/api/book"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodGet,
+				Path:    "/lessonStudents",
+				Handler: lesson.GetLessonStudentsHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/list",
+				Handler: lesson.GetLessonListHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/oneLesson/:lessonId",
+				Handler: lesson.GetOneLessonHandler(serverCtx),
+			},
+		},
+		rest.WithPrefix("/api/lesson"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodGet,
+				Path:    "/list",
+				Handler: student.GetStudentListHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/oneStudent/:studentId",
+				Handler: student.GetOneStudentHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/studentCourses/:studentId",
+				Handler: student.GetStudentCoursesHandler(serverCtx),
+			},
+		},
+		rest.WithPrefix("/api/student"),
 	)
 }
