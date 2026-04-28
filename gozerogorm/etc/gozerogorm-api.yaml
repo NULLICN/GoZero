@@ -4,3 +4,6 @@ Port: 8888
 Mysql:
   # 47.109.80.234
   DataSource: "root:040412@tcp(47.109.80.234:3306)/gorm?charset=utf8mb4&parseTime=True&loc=Asia%2FShanghai"
+Auth:
+  AccessSecret: "nullicn4412_"
+  AccessExpire: 86400

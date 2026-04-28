@@ -6,7 +6,7 @@ type Student struct {
 	Password string `json:"password"`
 	ClassId int `json:"class_id"`
 	Name string `json:"name"`
-	Lesson []Lesson `json:"lesson" gorm:"many2many:user_languages;"`
+	Lesson []Lesson `json:"lesson" gorm:"many2many:lesson_student;"`
 }
 
 func (Student) TableName() string {

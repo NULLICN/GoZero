@@ -1,0 +1,19 @@
+syntax = "v1"
+
+import "common.api"
+
+type (
+	LoginReq {
+		Username string `json:"username"`
+		Password string `json:"password"`
+	}
+)
+
+@server (
+	group: account
+	prefix: "/api"
+)
+service gozerogorm-api {
+	@handler login
+	post /user/login (LoginReq) returns (CommonResponse)
+}

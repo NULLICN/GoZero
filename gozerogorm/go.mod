@@ -4,6 +4,7 @@ go 1.26.1
 
 require (
 	github.com/zeromicro/go-zero v1.10.1
+	github.com/zeromicro/x v0.0.0-20240408115609-8224c482b07e
 	gorm.io/driver/mysql v1.6.0
 	gorm.io/gorm v1.31.1
 )

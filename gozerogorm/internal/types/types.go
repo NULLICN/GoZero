@@ -3,6 +3,13 @@
 
 package types
 
+type Address struct {
+	Id      int64  `json:"id"`
+	Address string `json:"address"`
+	Phone   string `json:"phone"`
+	Name    string `json:"name"`
+}
+
 type Book struct {
 	Id       int     `json:"id"`
 	Bookname string  `json:"bookname"`
@@ -35,6 +42,11 @@ type CommonResponse struct {
 
 type LessonIdReq struct {
 	LessonId int `path:"lessonId"`
+}
+
+type LoginReq struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
 }
 
 type StudentIdReq struct {

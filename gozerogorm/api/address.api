@@ -1,0 +1,22 @@
+syntax = "v1"
+
+import "common.api"
+
+type (
+	Address {
+		Id      int64  `json:"id"`
+		Address string `json:"address"`
+		phone   string `json:"phone"`
+		name    string `json:"name"`
+	}
+)
+
+@server (
+	group: address
+	prefix: "/api"
+	jwt: Auth
+)
+service gozerogorm-api {
+	@handler address
+	get /address/list () returns (CommonResponse)
+}

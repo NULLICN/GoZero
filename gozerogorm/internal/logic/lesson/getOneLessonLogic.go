@@ -32,12 +32,13 @@ func (l *GetOneLessonLogic) GetOneLesson(req *types.LessonIdReq) (resp *types.Co
 	// todo: add your logic here and delete this line
 	var lesson gorm.Lesson
 	fmt.Printf("================req.id: %v\n", req.LessonId)
-	err = l.svcCtx.DB.Where("id=?", req.LessonId).First(&lesson).Error
+	//err = l.svcCtx.DB.Where("id=?", req.LessonId).First(&lesson).Error
+	err = l.svcCtx.DB.Preload("Student", "").Find(&lesson, req.LessonId).Error
 	if err != nil {
 		return &types.CommonResponse{
 			Code:    0,
 			Success: false,
-			Message: "查询课程详情失败",
+			Message: "查询课程及学生详情失败",
 		}, nil
 	}
 

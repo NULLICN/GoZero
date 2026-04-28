@@ -6,6 +6,8 @@ package handler
 import (
 	"net/http"
 
+	account "gozerogorm/internal/handler/account"
+	address "gozerogorm/internal/handler/address"
 	bookmetadata "gozerogorm/internal/handler/bookmetadata"
 	books "gozerogorm/internal/handler/books"
 	lesson "gozerogorm/internal/handler/lesson"
@@ -16,6 +18,29 @@ import (
 )
 
 func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/user/login",
+				Handler: account.LoginHandler(serverCtx),
+			},
+		},
+		rest.WithPrefix("/api"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodGet,
+				Path:    "/address/list",
+				Handler: address.AddressHandler(serverCtx),
+			},
+		},
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
+		rest.WithPrefix("/api"),
+	)
+
 	server.AddRoutes(
 		[]rest.Route{
 			{
