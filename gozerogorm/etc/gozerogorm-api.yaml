@@ -7,3 +7,5 @@ Mysql:
 Auth:
   AccessSecret: "nullicn4412_"
   AccessExpire: 86400
+# RefreshSecret: "another-random-secret"
+# RefreshExpire: 604800        # Refresh Token 有效期：7 天

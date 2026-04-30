@@ -6,6 +6,7 @@ package address
 import (
 	"context"
 
+	"gozerogorm/internal/biz"
 	"gozerogorm/internal/svc"
 	"gozerogorm/internal/types"
 
@@ -28,6 +29,8 @@ func NewAddressLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddressLo
 
 func (l *AddressLogic) Address() (resp *types.CommonResponse, err error) {
 	// todo: add your logic here and delete this line
-
+	payload := l.ctx.Value("payload").(string)
+	logx.Info("===payload===:", payload)
+	resp = biz.Success(payload)
 	return
 }

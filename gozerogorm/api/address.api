@@ -12,9 +12,9 @@ type (
 )
 
 @server (
+	jwt: Auth
 	group: address
 	prefix: "/api"
-	jwt: Auth
 )
 service gozerogorm-api {
 	@handler address

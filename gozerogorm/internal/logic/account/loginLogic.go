@@ -5,7 +5,9 @@ package account
 
 import (
 	"context"
+	"time"
 
+	"gozerogorm/internal/biz"
 	"gozerogorm/internal/svc"
 	"gozerogorm/internal/types"
 
@@ -28,6 +30,8 @@ func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginLogic 
 
 func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.CommonResponse, err error) {
 	// todo: add your logic here and delete this line
+	token, _ := biz.GetJwtToken(l.svcCtx.Config.Auth.AccessSecret, time.Now().Unix(), l.svcCtx.Config.Auth.AccessExpire, req.Username)
 
-	return
+    return biz.Success(token), nil
+	
 }

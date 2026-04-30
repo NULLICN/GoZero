@@ -1,0 +1,19 @@
+syntax = "v1"
+
+service gozerogorm-api {
+	// 公开接口
+	@handler Login
+	post /user/login (LoginReq) returns (LoginResp)
+
+	@handler RefreshToken
+	post /user/refresh (RefreshReq) returns (LoginResp)
+}
+
+@server (
+	jwt: Auth
+)
+service gozerogorm-api {
+	// 受保护接口，jwt 自动注入 Token 验证
+	@handler GetProfile
+	get /user/profile (ProfileReq) returns (ProfileResp)
+}
