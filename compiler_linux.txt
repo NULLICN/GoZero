@@ -1,0 +1,50 @@
+# ============================================================
+#  Windows 环境下交叉编译 Linux x86_64
+# ============================================================
+#
+# 基本用法（替换 <output> 和 <entry>）：
+
+GOOS=linux GOARCH=amd64 go build -o <output> <entry>
+
+# 常用示例：
+#
+#   当前目录编译：
+#   GOOS=linux GOARCH=amd64 go build -o app-linux .
+#
+#   指定入口文件：
+#   GOOS=linux GOARCH=amd64 go build -o app-linux ./cmd/main.go
+#
+# 瘦身编译（去掉调试信息）：
+#   GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o app-linux .
+#
+# 带版本信息：
+#   GOOS=linux GOARCH=amd64 go build -ldflags="-s -w -X main.version=1.0.0" -o app-linux .
+
+
+# ============================================================
+#  Linux 环境下编译 Linux x86_64（本机编译）
+# ============================================================
+#
+# Linux 本机编译无需设置 GOOS/GOARCH，默认即为当前平台：
+
+go build -o <output> <entry>
+
+# 常用示例：
+#
+#   当前目录编译：
+#   go build -o app .
+#
+#   指定入口文件：
+#   go build -o app ./cmd/main.go
+#
+# 瘦身编译（去掉调试信息，减少二进制体积）：
+#   go build -ldflags="-s -w" -o app .
+#
+# 带版本信息：
+#   go build -ldflags="-s -w -X main.version=1.0.0" -o app .
+#
+# 静态链接（如果有 CGO 依赖，避免动态库缺失）：
+#   CGO_ENABLED=0 go build -ldflags="-s -w" -o app .
+#
+# 静态链接 + 指定平台（跨发行版通用）：
+#   CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o app .
