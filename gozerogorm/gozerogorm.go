@@ -1,9 +1,11 @@
 package main
 
 import (
+	_ "embed"
 	"encoding/json"
 	"flag"
 	"fmt"
+	"log"
 	"net/http"
 
 	"gozerogorm/internal/config"
@@ -18,13 +20,22 @@ import (
 	"github.com/zeromicro/x/errors"
 )
 
-var configFile = flag.String("f", "etc/gozerogorm-api.yaml", "the config file")
+//go:embed etc/gozerogorm-api.yaml
+var embeddedConfig []byte
+
+var configFile = flag.String("f", "", "config file path (optional, uses embedded config by default)")
 
 func main() {
 	flag.Parse()
 
 	var c config.Config
-	conf.MustLoad(*configFile, &c)
+	if *configFile != "" {
+		conf.MustLoad(*configFile, &c)
+	} else {
+		if err := conf.LoadFromYamlBytes(embeddedConfig, &c); err != nil {
+			log.Fatalf("load embedded config error: %v", err)
+		}
+	}
 
 	server := rest.MustNewServer(c.RestConf, rest.WithUnauthorizedCallback(
 		func(w http.ResponseWriter, r *http.Request, err error) {

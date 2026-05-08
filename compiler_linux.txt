@@ -2,23 +2,35 @@
 #  Windows 环境下交叉编译 Linux x86_64
 # ============================================================
 #
-# 基本用法（替换 <output> 和 <entry>）：
+# cmd 下执行（每条命令单独一行）：
 
-GOOS=linux GOARCH=amd64 go build -o <output> <entry>
+set GOOS=linux
+set GOARCH=amd64
+go build -o <output> <entry>
 
-# 常用示例：
+# 常用示例 — cmd（注意：&& 前不能有空格，否则变量值会包含尾部空格）：
 #
 #   当前目录编译：
-#   GOOS=linux GOARCH=amd64 go build -o app-linux .
+#   set GOOS=linux&& set GOARCH=amd64&& go build -o app-linux .
 #
 #   指定入口文件：
-#   GOOS=linux GOARCH=amd64 go build -o app-linux ./cmd/main.go
+#   set GOOS=linux&& set GOARCH=amd64&& go build -o app-linux ./cmd/main.go
 #
 # 瘦身编译（去掉调试信息）：
-#   GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o app-linux .
+#   set GOOS=linux&& set GOARCH=amd64&& go build -ldflags="-s -w" -o app-linux .
 #
 # 带版本信息：
-#   GOOS=linux GOARCH=amd64 go build -ldflags="-s -w -X main.version=1.0.0" -o app-linux .
+#   set GOOS=linux&& set GOARCH=amd64&& go build -ldflags="-s -w -X main.version=1.0.0" -o app-linux .
+#
+# ---
+# PowerShell 下执行：
+#
+#   $env:GOOS="linux"; $env:GOARCH="amd64"; go build -o app-linux ./cmd/main.go
+#
+# ---
+# Git Bash / WSL 下可直接用 Unix 语法：
+#
+#   GOOS=linux GOARCH=amd64 go build -o app-linux ./cmd/main.go
 
 
 # ============================================================
