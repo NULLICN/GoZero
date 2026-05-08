@@ -1,0 +1,33 @@
+// 基于 goctl 生成模板，包装 client/greeter 的 protobuf 客户端
+package greeterclient
+
+import (
+	"context"
+
+	"client/greeter"
+
+	"github.com/zeromicro/go-zero/zrpc"
+	"google.golang.org/grpc"
+)
+
+type (
+	HelloReq = greeter.HelloReq
+	HelloRes = greeter.HelloRes
+
+	Greeter interface {
+		SayHello(ctx context.Context, in *HelloReq, opts ...grpc.CallOption) (*HelloRes, error)
+	}
+
+	defaultGreeter struct {
+		cli zrpc.Client
+	}
+)
+
+func NewGreeter(cli zrpc.Client) Greeter {
+	return &defaultGreeter{cli: cli}
+}
+
+func (m *defaultGreeter) SayHello(ctx context.Context, in *HelloReq, opts ...grpc.CallOption) (*HelloRes, error) {
+	client := greeter.NewGreeterClient(m.cli.Conn())
+	return client.SayHello(ctx, in, opts...)
+}

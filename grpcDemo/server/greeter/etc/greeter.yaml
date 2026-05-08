@@ -1,5 +1,6 @@
 Name: greeter.rpc
 ListenOn: 0.0.0.0:8080
+AdvertisedIp: 47.109.80.234
 
 # 新增以下 Nacos 配置
 Nacos:

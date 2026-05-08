@@ -6,7 +6,16 @@
       "Bash(go build *)",
       "Bash(file app-linux-1 *)",
       "Bash(go mod *)",
-      "Bash(go doc *)"
+      "Bash(go doc *)",
+      "Bash(go env *)",
+      "Bash(ls \"C:/Users/34699/go/pkg/mod/github.com/nacos-group/\" 2>&1)",
+      "Read(//c/Users/34699/go/pkg/mod/github.com/nacos-group/**)",
+      "Bash(ls \"C:/Users/34699/go/pkg/mod/github.com/zeromicro/go-zero@v1.10.1/core/conf/\" 2>&1)",
+      "Read(//c/Users/34699/go/pkg/mod/github.com/zeromicro/go-zero@v1.10.1/core/conf/**)",
+      "Bash(ls \"C:/Users/34699/go/pkg/mod/github.com/zeromicro/go-zero@v1.10.1/core/\" 2>&1)",
+      "Read(//c/Users/34699/go/pkg/mod/github.com/zeromicro/go-zero@v1.10.1/core/**)",
+      "Bash(grep -rn \"nacos-sdk-go-v2\\\\|nacos-sdk-go/v2\" \"C:/Users/34699/go/pkg/mod/github.com/zeromicro/zero-contrib/zrpc/registry/nacos@v0.0.0-20251020121907-c2e4c4911576/\" 2>&1)",
+      "Read(//c/Users/34699/go/pkg/mod/github.com/zeromicro/zero-contrib/zrpc/registry/nacos@v0.0.0-20251020121907-c2e4c4911576/**)"
     ]
   }
 }
