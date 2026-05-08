@@ -1,28 +1,49 @@
 package main
 
 import (
-	"client/greeter"
 	"context"
+	"flag"
 	"fmt"
 	"log"
 
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
+	"client/greeter"
+
+	"github.com/zeromicro/go-zero/core/conf"
+	"github.com/zeromicro/go-zero/zrpc"
+	_ "github.com/zeromicro/zero-contrib/zrpc/registry/nacos"
 )
 
+type NacosConfig struct {
+	Ip                  string
+	Port                uint64
+	Namespace           string
+	NotLoadCacheAtStart bool
+	LogLevel            string
+}
+
+type Config struct {
+	zrpc.RpcClientConf
+	Nacos NacosConfig
+}
+
+var configFile = flag.String("f", "etc/client.yaml", "the config file")
+
 func main() {
-	conn, err := grpc.NewClient("127.0.0.1:8080", grpc.WithTransportCredentials(insecure.NewCredentials()))
-	if err != nil {
-		log.Fatal(err)
-	}
-	// 注册客户端
-	client := greeter.NewGreeterClient(conn)
+	flag.Parse()
+
+	var c Config
+	conf.MustLoad(*configFile, &c)
+
+	conn := zrpc.MustNewClient(c.RpcClientConf)
+	defer conn.Conn().Close()
+
+	client := greeter.NewGreeterClient(conn.Conn())
 
 	res, err := client.SayHello(context.Background(), &greeter.HelloReq{
 		Name: "nullicn",
 	})
-	fmt.Printf("%#v\r\n", res)
+	if err != nil {
+		log.Fatal(err)
+	}
 	fmt.Println(res.Message)
-	defer conn.Close()
-
 }

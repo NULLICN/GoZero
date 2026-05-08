@@ -4,7 +4,9 @@
       "Bash(go version *)",
       "Bash(cat go.mod)",
       "Bash(go build *)",
-      "Bash(file app-linux-1 *)"
+      "Bash(file app-linux-1 *)",
+      "Bash(go mod *)",
+      "Bash(go doc *)"
     ]
   }
 }

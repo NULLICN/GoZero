@@ -1,0 +1,9 @@
+Target: nacos://8.137.180.112:8848/greeter.rpc?namespace=public
+NonBlock: true
+
+Nacos:
+  Ip: 8.137.180.112
+  Port: 8848
+  Namespace: public
+  NotLoadCacheAtStart: true
+  LogLevel: info
