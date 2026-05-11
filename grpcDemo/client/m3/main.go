@@ -1,5 +1,7 @@
-// 对比示例：使用 go-zero 风格 greeterclient 包装器的完整 RPC 客户端
-// 与 m/main.go (原始 protobuf 客户端) 做对比
+// 对比示例：使用 nacos-sdk-go/v2 直接做服务发现，再直连 gRPC 的客户端
+// 与 m/main.go (go-zero nacos:// resolver) 和 m2/main.go (go-zero wrapper) 做对比
+
+// m3.exe -name nullicn -count 1
 package main
 
 import (
@@ -11,12 +13,16 @@ import (
 	"syscall"
 	"time"
 
-	"client/greeterclient"
+	"client/greeter"
 
+	"github.com/nacos-group/nacos-sdk-go/v2/clients"
+	"github.com/nacos-group/nacos-sdk-go/v2/common/constant"
+	"github.com/nacos-group/nacos-sdk-go/v2/vo"
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/logx"
-	"github.com/zeromicro/go-zero/zrpc"
-	_ "github.com/zeromicro/zero-contrib/zrpc/registry/nacos"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/connectivity"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 type NacosConfig struct {
@@ -28,7 +34,6 @@ type NacosConfig struct {
 }
 
 type Config struct {
-	zrpc.RpcClientConf
 	Nacos NacosConfig
 }
 
@@ -47,21 +52,56 @@ func main() {
 	conf.MustLoad(*configFile, &c)
 
 	logx.MustSetup(logx.LogConf{})
-	logx.Infof("connecting to %s", c.Target)
 
-	conn := zrpc.MustNewClient(c.RpcClientConf)
-	defer conn.Conn().Close()
+	// 1. 创建 Nacos 服务发现客户端
+	namingClient, err := clients.NewNamingClient(vo.NacosClientParam{
+		ServerConfigs: []constant.ServerConfig{
+			*constant.NewServerConfig(c.Nacos.Ip, c.Nacos.Port),
+		},
+		ClientConfig: &constant.ClientConfig{
+			NamespaceId:         c.Nacos.Namespace,
+			TimeoutMs:           50000,
+			NotLoadCacheAtStart: c.Nacos.NotLoadCacheAtStart,
+			LogDir:              "/tmp/nacos/log",
+			CacheDir:            "/tmp/nacos/cache",
+			LogLevel:            c.Nacos.LogLevel,
+		},
+	})
+	if err != nil {
+		logx.Errorf("创建 Nacos 客户端失败: %v", err)
+		os.Exit(1)
+	}
 
-	// ====== 与 m/main.go 的区别在这里 ======
-	// 原始方式: greeter.NewGreeterClient(conn.Conn())
-	// 包装方式: greeterclient.NewGreeter(conn)  — 传 conn 而非 conn.Conn()
-	client := greeterclient.NewGreeter(conn)
+	// 2. 从 Nacos 获取一个健康的服务实例
+	instance, err := namingClient.SelectOneHealthyInstance(vo.SelectOneHealthInstanceParam{
+		ServiceName: "greeter.rpc",
+		GroupName:   "DEFAULT_GROUP",
+	})
+	if err != nil {
+		logx.Errorf("服务发现失败: %v", err)
+		os.Exit(1)
+	}
 
-	// 等待连接就绪（替代盲 sleep）
+	addr := fmt.Sprintf("%s:%d", instance.Ip, instance.Port)
+	logx.Infof("通过 Nacos 发现服务实例: %s", addr)
+
+	// 3. 直连发现的实例 (不使用 go-zero 的 nacos:// resolver)
+	conn, err := grpc.NewClient(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		logx.Errorf("连接失败: %v", err)
+		os.Exit(1)
+	}
+	defer conn.Close()
+
+	// 触发懒连接从 Idle → Connecting → Ready 的状态迁移
+	conn.Connect()
 	if !waitReady(conn, 10*time.Second) {
 		logx.Error("connection not ready after timeout")
 		os.Exit(1)
 	}
+
+	// 4. 使用原始 proto 客户端 (与 m2 的 greeterclient 包装器做对比)
+	client := greeter.NewGreeterClient(conn)
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
@@ -82,10 +122,10 @@ func main() {
 	}
 }
 
-func waitReady(conn zrpc.Client, timeout time.Duration) bool {
+func waitReady(conn *grpc.ClientConn, timeout time.Duration) bool {
 	deadline := time.Now().Add(timeout)
 	for time.Now().Before(deadline) {
-		if conn.Conn().GetState().String() == "READY" {
+		if conn.GetState() == connectivity.Ready {
 			logx.Info("connection ready")
 			return true
 		}
@@ -94,7 +134,7 @@ func waitReady(conn zrpc.Client, timeout time.Duration) bool {
 	return false
 }
 
-func runBatch(ctx context.Context, client greeterclient.Greeter, n int) {
+func runBatch(ctx context.Context, client greeter.GreeterClient, n int) {
 	sem := make(chan struct{}, 10) // 最多 10 个并发
 	errCh := make(chan error, n)
 
@@ -127,7 +167,7 @@ func runBatch(ctx context.Context, client greeterclient.Greeter, n int) {
 	logx.Infof("batch complete: %d calls, %d failures", n, failures)
 }
 
-func runLoop(ctx context.Context, client greeterclient.Greeter, interval time.Duration) {
+func runLoop(ctx context.Context, client greeter.GreeterClient, interval time.Duration) {
 	ticker := time.NewTicker(interval)
 	defer ticker.Stop()
 
@@ -142,7 +182,7 @@ func runLoop(ctx context.Context, client greeterclient.Greeter, interval time.Du
 	}
 }
 
-func callWithRetry(ctx context.Context, client greeterclient.Greeter, name string) error {
+func callWithRetry(ctx context.Context, client greeter.GreeterClient, name string) error {
 	const maxRetries = 3
 
 	var lastErr error
@@ -158,7 +198,7 @@ func callWithRetry(ctx context.Context, client greeterclient.Greeter, name strin
 		}
 
 		callCtx, cancel := context.WithTimeout(ctx, *timeout)
-		res, err := client.SayHello(callCtx, &greeterclient.HelloReq{Name: name})
+		res, err := client.SayHello(callCtx, &greeter.HelloReq{Name: name})
 		cancel()
 
 		if err != nil {

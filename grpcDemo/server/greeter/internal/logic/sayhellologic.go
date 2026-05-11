@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"fmt"
 
 	"greeter/greeter"
 	"greeter/internal/svc"
@@ -25,8 +26,8 @@ func NewSayHelloLogic(ctx context.Context, svcCtx *svc.ServiceContext) *SayHello
 
 func (l *SayHelloLogic) SayHello(in *greeter.HelloReq) (*greeter.HelloRes, error) {
 	// todo: add your logic here and delete this line
-
+	fmt.Println("===========你好："+ in.Name)
 	return &greeter.HelloRes{
-		Message: "你好" + in.Name,
+		Message: "你好：" + in.Name,
 	}, nil
 }

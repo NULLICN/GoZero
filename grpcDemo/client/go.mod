@@ -3,6 +3,7 @@ module client
 go 1.26.1
 
 require (
+	github.com/nacos-group/nacos-sdk-go/v2 v2.3.5
 	github.com/zeromicro/go-zero v1.10.1
 	github.com/zeromicro/zero-contrib/zrpc/registry/nacos v0.0.0-20251020121907-c2e4c4911576
 	google.golang.org/grpc v1.81.0
@@ -67,7 +68,6 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.3-0.20250322232337-35a7c28c31ee // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
-	github.com/nacos-group/nacos-sdk-go/v2 v2.3.5 // indirect
 	github.com/opentracing/opentracing-go v1.2.1-0.20220228012449-10b1cf09e00b // indirect
 	github.com/openzipkin/zipkin-go v0.4.3 // indirect
 	github.com/orcaman/concurrent-map v1.0.0 // indirect

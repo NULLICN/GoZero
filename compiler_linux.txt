@@ -25,7 +25,7 @@ go build -o <output> <entry>
 # ---
 # PowerShell 下执行：
 #
-#   $env:GOOS="linux"; $env:GOARCH="amd64"; go build -o app-linux ./cmd/main.go
+#   $env:GOOS="linux"; $env:GOARCH="amd64"; go build -ldflags="-s -w" -o app-linux ./cmd/main.go
 #
 # ---
 # Git Bash / WSL 下可直接用 Unix 语法：
