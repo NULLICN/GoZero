@@ -1,0 +1,17 @@
+Name: m4-api-gateway
+Host: 0.0.0.0
+Port: 8081
+
+# RPC client — 会通过 Nacos 发现 greeter.rpc
+RpcClient:
+  Target: nacos://8.137.180.112:8848/greeter.rpc?namespaceid=public&GroupName=NULLICN
+  NonBlock: true
+  Timeout: 5000
+
+# Nacos 配置
+Nacos:
+  Ip: 8.137.180.112
+  Port: 8848
+  Namespace: public
+  NotLoadCacheAtStart: true
+  LogLevel: info

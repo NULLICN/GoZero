@@ -1,5 +1,5 @@
 Name: greeter.rpc
-ListenOn: 0.0.0.0:8080
+ListenOn: 0.0.0.0:8081
 AdvertisedIp: 47.109.80.234
 
 # 新增以下 Nacos 配置
@@ -7,5 +7,6 @@ Nacos:
   Ip: 8.137.180.112      # 你的 Nacos 服务器 IP
   Port: 8848          # Nacos 端口
   Namespace: public   # Nacos 命名空间 ID，默认 public 可以留空
+  GroupName: NULLICN
   NotLoadCacheAtStart: true
   LogLevel: info

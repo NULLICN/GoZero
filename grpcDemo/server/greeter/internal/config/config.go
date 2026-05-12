@@ -12,6 +12,7 @@ type NacosConfig struct {
 	Ip                  string
 	Port                uint64
 	Namespace           string
+	GroupName           string `json:",optional"`
 	NotLoadCacheAtStart bool
 	LogLevel            string // 通常为 "info" 或 "debug"
 }

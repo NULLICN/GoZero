@@ -1,0 +1,27 @@
+syntax = "v1"
+
+info (
+	title:   "m4 API Gateway"
+	desc:    "API 网关 — 对 greeter.rpc 的 HTTP 入口，仅作转发测试"
+	author:  "nullicn"
+	version: "1.0"
+)
+
+// HTTP → RPC 转发请求 / 响应
+type SayHelloReq {
+	Name string `json:"name"`
+}
+
+type SayHelloRes {
+	Message string `json:"message"`
+}
+
+// 服务定义
+service m4api {
+	@handler SayHelloGetHandler
+	get /sayhello (SayHelloReq) returns (SayHelloRes)
+
+	@handler SayHelloPostHandler
+	post /sayhello (SayHelloReq) returns (SayHelloRes)
+}
+

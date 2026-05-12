@@ -29,6 +29,7 @@ type NacosConfig struct {
 	Ip                  string
 	Port                uint64
 	Namespace           string
+	GroupName           string `json:",optional"`
 	NotLoadCacheAtStart bool
 	LogLevel            string
 }
@@ -53,6 +54,11 @@ func main() {
 
 	logx.MustSetup(logx.LogConf{})
 
+	groupName := c.Nacos.GroupName
+	if groupName == "" {
+		groupName = "DEFAULT_GROUP"
+	}
+
 	// 1. 创建 Nacos 服务发现客户端
 	namingClient, err := clients.NewNamingClient(vo.NacosClientParam{
 		ServerConfigs: []constant.ServerConfig{
@@ -75,7 +81,7 @@ func main() {
 	// 2. 从 Nacos 获取一个健康的服务实例
 	instance, err := namingClient.SelectOneHealthyInstance(vo.SelectOneHealthInstanceParam{
 		ServiceName: "greeter.rpc",
-		GroupName:   "DEFAULT_GROUP",
+		GroupName:   groupName,
 	})
 	if err != nil {
 		logx.Errorf("服务发现失败: %v", err)
