@@ -23,7 +23,15 @@
       "WebSearch",
       "WebFetch(domain:developer.aliyun.com)",
       "Bash(sed -i 's/GroupName:   \"DEFAULT_GROUP\"/GroupName:   groupName/' m3/main.go)",
-      "Read(//c/c/Users/34699/Desktop/GoZero/grpcDemo/client/m3/**)"
+      "Read(//c/c/Users/34699/Desktop/GoZero/grpcDemo/client/m3/**)",
+      "Bash(netstat -ano)",
+      "Bash(taskkill /PID 28572 /F)",
+      "Bash(cmd.exe //c \"taskkill /PID 28572 /F\")",
+      "Bash(find /d/CODE/GO/GoZero/grpcDemo/server/greeter -path \"*/go-zero/core/service/*conf*\" -o -path \"*/go-zero/zrpc/*config*\" 2>/dev/null | head -20 ; find /c/Users -path \"*/go-zero/zrpc/config.go\" 2>/dev/null | head -5)",
+      "Read(//c/Users/**)",
+      "Bash(find /d/CODE/GO -path \"*/go-zero/zrpc/internal/config.go\" -o -path \"*/go-zero/zrpc/config.go\" 2>/dev/null | head -5)",
+      "Read(//d/CODE/GO/**)",
+      "Bash(echo \"EXIT:$?\")"
     ]
   }
 }

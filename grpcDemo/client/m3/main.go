@@ -29,7 +29,7 @@ type NacosConfig struct {
 	Ip                  string
 	Port                uint64
 	Namespace           string
-	GroupName           string `json:",optional"`
+	GroupName           string 
 	NotLoadCacheAtStart bool
 	LogLevel            string
 }

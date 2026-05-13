@@ -1,12 +1,11 @@
-Name: greeter.rpc
-ListenOn: 0.0.0.0:8081
-AdvertisedIp: 47.109.80.234
+# === Bootstrap config (local) ===
+# Only contains connection info for Nacos config center.
+# The main business config is stored in Nacos config center.
 
-# 新增以下 Nacos 配置
-Nacos:
-  Ip: 8.137.180.112      # 你的 Nacos 服务器 IP
-  Port: 8848          # Nacos 端口
-  Namespace: public   # Nacos 命名空间 ID，默认 public 可以留空
-  GroupName: NULLICN
-  NotLoadCacheAtStart: true
-  LogLevel: info
+NacosIp: 8.137.180.112
+NacosPort: 8848
+NacosNamespaceId: public
+NacosUsername:
+NacosPassword:
+ConfigDataId: greeter.rpc.yaml
+ConfigGroup: NULLICN

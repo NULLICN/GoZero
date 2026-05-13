@@ -23,8 +23,6 @@ import (
 	"io"
 	"net/http"
 	"os"
-	"os/signal"
-	"syscall"
 
 	"client/greeterclient"
 	"client/m4api/internal/config"
@@ -49,6 +47,9 @@ func main() {
 
 	logx.MustSetup(logx.LogConf{})
 	logx.Infof("starting m4api API gateway on %s:%d", c.Host, c.Port)
+
+	// 0. Nacos SDK 环境变量 (zero-contrib 插件原生支持, URL 参数因 bool 字段缺 string 标签无法传递)
+	os.Setenv("NACOS_NOT_LOAD_CACHE_AT_START", "true")
 
 	// 1. 初始化 RPC 客户端 (通过 Nacos 自动发现 greeter.rpc)
 	// NonBlock:true 下连接懒加载，首次 RPC 调用时自动建连
@@ -76,16 +77,7 @@ func main() {
 		Handler: healthHandler,
 	})
 
-	// 4. 优雅关闭 (与 go-zero 内置 shutdown 叠加, 双保险)
-	go func() {
-		sigCh := make(chan os.Signal, 1)
-		signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
-		sig := <-sigCh
-		logx.Infof("received signal %s, shutting down...", sig)
-		server.Stop()
-	}()
-
-	// 5. 启动
+	// 4. 启动 (go-zero 内置 SIGINT/SIGTERM 优雅关闭)
 	fmt.Printf("m4api API gateway listening on http://%s:%d\n", c.Host, c.Port)
 	fmt.Printf("  GET/POST http://localhost:%d/sayhello?name=xxx\n", c.Port)
 	fmt.Printf("  GET  http://localhost:%d/health\n", c.Port)

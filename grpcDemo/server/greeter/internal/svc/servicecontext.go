@@ -3,11 +3,16 @@ package svc
 import "greeter/internal/config"
 
 type ServiceContext struct {
-	Config config.Config
+	AtomicCfg *config.AtomicConfig
 }
 
-func NewServiceContext(c config.Config) *ServiceContext {
+func NewServiceContext(ac *config.AtomicConfig) *ServiceContext {
 	return &ServiceContext{
-		Config: c,
+		AtomicCfg: ac,
 	}
+}
+
+// Config returns the current active config (always fresh, safe for hot-reload).
+func (sc *ServiceContext) Config() *config.Config {
+	return sc.AtomicCfg.Load()
 }
